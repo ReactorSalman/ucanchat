@@ -16,7 +16,7 @@ firebase.initializeApp({
   projectId: "ushipfriend",
   storageBucket: "ushipfriend.appspot.com",
   messagingSenderId: "982688180304",
-  appId: "1:982688180304:web:c6b63a7074c3a832be4955"
+  appId: "1:982688180304:web:1aac3d101c705776be4955"
 });
 
 const auth = firebase.auth();
