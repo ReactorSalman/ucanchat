@@ -50,6 +50,11 @@ function SignIn() {
     auth.signInWithPopup(provider);
   }
 
+  const signInWithFacebook = () => {
+    const facebookProvider = new firebase.auth.FacebookAuthProvider();
+    auth.signInWithPopup(facebookProvider);
+  }
+
   return (
     <>
       <div>
@@ -57,7 +62,7 @@ function SignIn() {
           <button className="loginBtn loginBtn--google" onClick={signInWithGoogle}>
             Sign in using Google
 					</button>
-          <button className="loginBtn loginBtn--facebook">
+          <button className="loginBtn loginBtn--facebook" onClick={signInWithFacebook}>
             Sign in using facebook
 					</button>
         </div>
