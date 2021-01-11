@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/ucanchat/static/css/main.c6d062c4.chunk.css",
-    "main.js": "/ucanchat/static/js/main.85070fc9.chunk.js",
-    "main.js.map": "/ucanchat/static/js/main.85070fc9.chunk.js.map",
+    "main.js": "/ucanchat/static/js/main.6102b220.chunk.js",
+    "main.js.map": "/ucanchat/static/js/main.6102b220.chunk.js.map",
     "runtime-main.js": "/ucanchat/static/js/runtime-main.fbd571c5.js",
     "runtime-main.js.map": "/ucanchat/static/js/runtime-main.fbd571c5.js.map",
     "static/js/2.ae68d15a.chunk.js": "/ucanchat/static/js/2.ae68d15a.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.fbd571c5.js",
     "static/js/2.ae68d15a.chunk.js",
     "static/css/main.c6d062c4.chunk.css",
-    "static/js/main.85070fc9.chunk.js"
+    "static/js/main.6102b220.chunk.js"
   ]
 }
