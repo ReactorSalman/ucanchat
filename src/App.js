@@ -4,139 +4,137 @@ import './App.css';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-// import 'firebase/analytics';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBD8851btTft8iHMaDYXmLRKYhoUEBOzXA",
-  authDomain: "ushipfriend.firebaseapp.com",
-  databaseURL: "https://ushipfriend.firebaseio.com",
-  projectId: "ushipfriend",
-  storageBucket: "ushipfriend.appspot.com",
-  messagingSenderId: "982688180304",
-  appId: "1:982688180304:web:1aac3d101c705776be4955"
+	apiKey: "AIzaSyBD8851btTft8iHMaDYXmLRKYhoUEBOzXA",
+	authDomain: "ushipfriend.firebaseapp.com",
+	databaseURL: "https://ushipfriend.firebaseio.com",
+	projectId: "ushipfriend",
+	storageBucket: "ushipfriend.appspot.com",
+	messagingSenderId: "982688180304",
+	appId: "1:982688180304:web:1aac3d101c705776be4955"
 });
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-// const analytics = firebase.analytics();
 
 
 function App() {
 
-  const [user] = useAuthState(auth);
+	const [user] = useAuthState(auth);
 
-  return (
-    <div className="App">
-      <header>
-        <h1 className="app-name-font">sabChat</h1>
-        <SignOut />
-      </header>
+	return (
+		<div className="App">
+			<header>
+				<h1 className="app-name-font">UcanChat</h1>
+				<SignOut />
+			</header>
 
-      <section>
-        {user ? <ChatRoom /> : <SignIn />}
-      </section>
+			<section>
+				{user ? <ChatRoom /> : <SignIn />}
+			</section>
 
-    </div>
-  );
+		</div>
+	);
 }
 
 function SignIn() {
 
-  const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
-  }
+	const signInWithGoogle = () => {
+		const provider = new firebase.auth.GoogleAuthProvider();
+		auth.signInWithPopup(provider);
+	}
 
-  const signInWithFacebook = () => {
-    const facebookProvider = new firebase.auth.FacebookAuthProvider();
-    auth.signInWithPopup(facebookProvider);
-  }
+	const signInWithFacebook = () => {
+		const facebookProvider = new firebase.auth.FacebookAuthProvider();
+		auth.signInWithPopup(facebookProvider);
+	}
 
-  return (
-    <>
-      <div>
-        <div>
-          <button className="loginBtn loginBtn--google" onClick={signInWithGoogle}>
-            Sign in using Google
+	return (
+		<>
+			<div>
+				<div>
+					<button className="loginBtn loginBtn--google" onClick={signInWithGoogle}>
+						Sign in using Google
 					</button>
-          <button className="loginBtn loginBtn--facebook" onClick={signInWithFacebook}>
-            Sign in using facebook
+					<button className="loginBtn loginBtn--facebook" onClick={signInWithFacebook}>
+						Sign in using facebook
 					</button>
-        </div>
-        <p>Do not violate the community guidelines or you will be banned for life!</p>
-      </div>
-    </>
-  )
+				</div>
+				<p>Do not violate the community guidelines or you will be banned for life!</p>
+			</div>
+		</>
+	)
 
 }
 
 function SignOut() {
-  return auth.currentUser && (
-    <button className="logoutBtn" onClick={() => auth.signOut()}>Sign Out</button>
-  )
+	return auth.currentUser && (
+		<button className="logoutBtn" onClick={() => auth.signOut()}>Sign Out</button>
+	)
 }
 
 
 function ChatRoom() {
-  const dummy = useRef();
-  const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt').limit(25);
+	const dummy = useRef();
+	const messagesRef = firestore.collection('messages');
+	const query = messagesRef.orderBy('createdAt').limit(25);
 
-  const [messages] = useCollectionData(query, { idField: 'id' });
+	const [messages] = useCollectionData(query, { idField: 'id' });
 
-  const [formValue, setFormValue] = useState('');
+	const [formValue, setFormValue] = useState('');
 
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
+	const sendMessage = async (e) => {
+		e.preventDefault();
 
-    const { uid, photoURL } = auth.currentUser;
+		const { uid, photoURL } = auth.currentUser;
 
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL
-    })
+		await messagesRef.add({
+			text: formValue,
+			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+			uid,
+			photoURL
+		})
 
-    setFormValue('');
-    dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
+		setFormValue('');
+		dummy.current.scrollIntoView({ behavior: 'smooth' });
+	}
 
-  return (<>
-    <main>
+	return (<>
+		<main>
 
-      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+			{messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
-      <span ref={dummy}></span>
+			<span ref={dummy}></span>
 
-    </main>
+		</main>
 
-    <form onSubmit={sendMessage}>
+		<form onSubmit={sendMessage}>
 
-      <input className="placeholder-view" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
+			<input className="placeholder-view" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
 
-      <button className="sendBtn" type="submit" disabled={!formValue}>Send</button>
+			<button className="sendBtn" type="submit" disabled={!formValue}>Send</button>
 
-    </form>
-  </>)
+		</form>
+	</>)
 }
 
 
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+	const { text, uid, photoURL } = props.message;
 
-  const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+	const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
-  return (<>
-    <div className={`message ${messageClass}`}>
-      <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
-      <p>{text}</p>
-    </div>
-  </>)
+	return (<>
+		<div className={`message ${messageClass}`}>
+			<img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
+			<p>{text}</p>
+		</div>
+	</>)
 }
 
 
